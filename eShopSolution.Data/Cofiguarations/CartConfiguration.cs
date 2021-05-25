@@ -13,6 +13,7 @@ namespace eShopSolution.Data.Cofiguarations
         {
             builder.ToTable("Carts");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
         }
     }
 }

@@ -1,0 +1,143 @@
+﻿
+@using eShopSolution.ViewModels.System.Roles
+@model RoleSearchViewModel
+
+<div class="container-fluid">
+    <div class="input-group col-md-12">
+        <div class="col-md-6">
+            <h1 class="mt-4">Danh Dách Quyền </h1>
+        </div>
+        <div class="col-md-6">
+            <a href="/Role/CreateRole" class="btn btn-success mt-4" style="float:right"><i class="fa fa-plus-circle"></i></a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            @using (Html.BeginForm("Index", null, FormMethod.Post))
+            {
+                <div class="input-group col-md-6">
+                    @Html.TextBoxFor(p => p.keyWork, new { @class = "form-control", @placeholder = "Tìm kiếm...." })
+                    <div class="input-group-append">
+                        <button class="input-group-text" id="">Tìm Kiếm </button>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    @if (ViewBag.statusMessage != null)
+    {
+        <div class="alert alert-success" id="ntfMessage">
+            <a href="#" class="alert-link">@ViewBag.statusMessage</a>
+        </div>
+    }
+    <div class=" mb-4">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        foreach (var item in @ViewBag.data)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <a href="/User/EditRole/@item.Id"><i class="fa fa-edit"></i></a>
+                                    <a href="#" class="DeleteRole" id="@item.Id"> <i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDeleteRole" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Thông Báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn Có Muốn Xoá Nhân Viên Này ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng </button>
+                <button type="button" class="btn btn-danger" id="btn-DeleteUser">Xoá</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+</style>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            //---Begin Event Delete ---
+            var id;
+            $('.DeleteRole').on('click', function () {
+                $('#modalDeleteUser').modal('show');
+                id = $(this).attr('id');
+            })
+            $('#btn-DeleteRole').on('click', function () {
+
+                $.ajax({
+                    data: {
+                        Id: id
+                    },
+                    url: '/User/DeleteUserById',
+                    success: function (response) {
+                        $('#modalDeleteUser').modal('hide');
+                        if (response.statusCode == 200) {
+                            $(location).href = '/User/Index';
+                            $('#ntfMessage').fadeIn();
+                        }
+                        else {
+                            console.log(response)
+                        }
+
+                    },
+                    error: function (response) {
+                        $('#modalDeleteUser').modal('hide');
+                        console.log(response)
+                    }
+                })
+            })
+            //-- End Event Delete
+
+            // -- turn of message status
+
+            setTimeout(function () {
+                $('#ntfMessage').fadeOut('slow');
+            }, 2000);
+
+             // -- end turn of message status
+        });
+
+    </script>
+
+}

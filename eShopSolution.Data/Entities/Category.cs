@@ -8,7 +8,7 @@ namespace eShopSolution.Data.Entities
     public class Category
     {
         public int  Id { set; get; }
-
+        
         public int SortOrder { set; get; }
         public bool IsShowHome { set; get; }
         public int? PrarentId { set; get; }

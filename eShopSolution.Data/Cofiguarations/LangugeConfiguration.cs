@@ -14,6 +14,7 @@ namespace eShopSolution.Data.Cofiguarations
             builder.ToTable("Languages");
 
             builder.HasKey(x => x.Id);
+           
         }
     }
 }

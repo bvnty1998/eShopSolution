@@ -1,0 +1,184 @@
+﻿<div class="container-fluid">
+    <div class="input-group col-md-12">
+        <div class="col-md-6">
+            <h1 class="mt-4">Phân Quyền </h1>
+        </div>
+        <div class="col-md-6">
+            <a class="btn btn-success mt-4" id="btn_SavePermission" style="float:right"><i class="fa fa-save"> </i> Save</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            @using (Html.BeginForm("Index", null, FormMethod.Post))
+            {
+                <div class="input-group col-md-6">
+                    <div class="input-group-append">
+                        <button class="input-group-text" id="">User</button>
+                    </div>
+                    @Html.DropDownList("UserId", null, "-- Chon Tai Khoan --", new { @class = "form-control with-search" })
+
+                </div>
+            }
+
+        </div>
+    </div>
+    @if (ViewBag.statusMessage == "Create Success")
+    {
+        <div class="alert alert-success" id="ntfMessage">
+            <a href="#" class="alert-link">@ViewBag.statusMessage</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" id="ntfMessage">
+            <a href="#" class="alert-link">@ViewBag.statusMessage</a>
+        </div>
+    }
+    <div class=" mb-4">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Function Name</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        foreach (var item in @ViewBag.ListFunction)
+                        {
+                            <tr>
+                                <td style="width:10%">
+                                    <input type="checkbox" class="check-all" id="">
+                                    <label class="form-check-label" for="exampleCheck1">All</label>
+                                </td>
+                                <td style="width:15%"><label class="functionName" id="@item.Id">@item.Name</label></td>
+                                <td>
+                                    @foreach (var role in @ViewBag.ListRole)
+                                    {
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="role @item.Name" id="@role.Id" value="@role.Name">
+                                            <label class="form-check-label" for="exampleCheck1">@role.Name</label>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+</style>
+
+@section scripts{
+    <script src="~/js/Permission/Permission.js"></script>
+    <script>
+        $(document).ready(function () {
+            eShopPermission.Init();
+            // ---Begin Event Select All Role---
+            $('.check-all').on('click', function () {
+                if (this.checked) {
+                    var row = jQuery(this).closest('tr');
+                    var coloumn = row.find('input.role');
+                    coloumn.each(function (i, item) {
+                        item.checked = true
+                    })
+
+                }
+                else {
+                    var row = jQuery(this).closest('tr');
+                    var coloumn = row.find('input.role');
+                    coloumn.each(function (i, item) {
+                        item.checked = false
+                    })
+                }
+            })
+            //--End Event Select All Role---
+
+            //--Begin Event Save Permission---
+            $('#btn_SavePermission').on('click', function () {
+                var data = [];
+                var row = $('tr'); // lấy tất cả nhữn dòng trong bảng
+
+                row.each(function (i, item) { // lặp từng dòng
+                    var rolechecks = [];
+                    var coloumn = $(item).find('td')
+                    var functionName = coloumn.find('label.functionName');// lấy tên function
+                    var Roles = coloumn.find('input.role'); // lấy quyền
+                    if (Roles.length > 0) {
+                        // lặp xem có bao nhiêu quyền được check
+                        Roles.each(function (j, role) {
+                            if (role.checked == true) {
+                                var rolecheck = {
+                                    Id: role.id,
+                                    Name: role.value,
+                                    Description: ''
+                                }
+                                rolechecks.push(rolecheck);
+                            }
+
+                        })
+                    }
+
+                    if (functionName.length > 0 && rolechecks.length > 0) {
+                        var permission = {
+                            userId: $('#UserId').val(),
+                            functionName: functionName.text(),
+                            functionId: functionName[0].id,
+                            roles: rolechecks
+                        }
+                        data.push(permission);
+                    }
+
+                })
+                // call ajax
+
+                $.ajax({
+                    type: "Post",
+                    url: '/Role/AssginRoleForUser',
+                    data: {
+                        permission: data
+                    },
+                    success: function (jsonData) {
+                        if (jsonData.code == 200) {
+                            location.reload();
+                        }
+                        if (jsonData.code == 403) {
+                            location.href = '/Role/AccessDenied';
+                        }
+                    },
+                    erorr: function (jsonData) {
+                        console.log(jsonData)
+                    }
+                })
+                console.log(data);
+
+            })
+            //--End Event Save Permission---
+
+            // -- turn of message status
+
+            setTimeout(function () {
+                $('#ntfMessage').fadeOut('slow');
+            }, 2000);
+
+            // -- end turn of message status
+        });
+
+    </script>
+
+}

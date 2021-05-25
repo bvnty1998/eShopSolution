@@ -12,9 +12,9 @@ namespace eShopSolution.Data.Entities
         public int Stock { set; get; }
         public int ViewCount { set; get; }
         public DateTime DateCreate { set; get; }
-        public string SeoAlias { set; get; }
         public int CategoryId { set; get; }
         public List<ProductTranslation> ProductTranslations { get; set; }
         public Category Category { set; get; }
+        public List<ProductImage> productImages { set; get; }
     }
 }

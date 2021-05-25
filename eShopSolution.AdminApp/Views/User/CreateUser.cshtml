@@ -1,0 +1,65 @@
+﻿
+@using eShopSolution.ViewModels.System.Users
+@model RegisterRequestViewModel
+
+<div class="container-fluid">
+    <div class="input-group col-md-12">
+        <div class="col-md-6">
+            <h1 class="mt-4">Thêm Nhân Viên </h1>
+        </div>
+
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            @using (Html.BeginForm("CreateUser", null, FormMethod.Post))
+            {
+                <div class="form-group row">
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.FirstName, new { @class = "form-control", @placeholder = "Nhập Họ" })
+                        @Html.ValidationMessageFor(model => model.FirstName,null,new { @class = "text-danger" })
+                    </div>
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.LastName, new { @class = "form-control", @placeholder = "Nhập Tên" })
+                        @Html.ValidationMessageFor(model => model.LastName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control", @placeholder = "Nhập số điện thoại", @type = "Number" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.Email, new { @class = "form-control", @placeholder = "Nhập email", @type = "Email" })
+                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.UserName, new { @class = "form-control", @placeholder = "Tên đăng nhập" })
+                        @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.Dob, new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(p => p.Dob, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.Password, new { @class = "form-control", @placeholder = "Mật khẩu", @type = "Password" })
+                        @Html.ValidationMessageFor(model => model.Password, "Mật khẩu phải có kí tự in hoa kí tự đặc biệt và số", new { @class = "text-danger" })
+                    </div>
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.ConfirmPassword, new { @class = "form-control", @placeholder = "Xác nhận mật khẩu", @type = "Password" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="" style="text-align:center">
+                    <button type="submit" class="btn btn-success mt-4">Thêm </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

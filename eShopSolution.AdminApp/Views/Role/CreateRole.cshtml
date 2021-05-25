@@ -1,0 +1,50 @@
+﻿
+@using eShopSolution.ViewModels.System.Roles
+@model AddRoleViewModel
+
+<div class="container-fluid">
+    <div class="input-group col-md-12">
+        <div class="col-md-6">
+            <h1 class="mt-4">Thêm Quyền </h1>
+        </div>
+    </div>
+    @if (ViewBag.statusMessage != null)
+    {
+        <div class="alert alert-success" id="ntfMessage">
+            <a href="#" class="alert-link">@ViewBag.statusMessage</a>
+        </div>
+    }
+    <div class="card mb-4">
+        <div class="card-body">
+            @using (Html.BeginForm("CreateRole", null, FormMethod.Post))
+            {
+                <div class="form-group row">
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.Name, new { @class = "form-control", @placeholder = "Nhập tên" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="col">
+                        @Html.TextBoxFor(p => p.Description, new { @class = "form-control", @placeholder = "Nhập mô tả" })
+                    </div>
+                </div>
+                <div class="" style="text-align:center">
+                    <button type="submit" class="btn btn-success mt-4">Thêm </button>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+
+        // -- turn of message status
+
+        setTimeout(function () {
+            $('#ntfMessage').fadeOut('slow');
+        }, 2000);
+
+        // -- end turn of message status
+    </script>
+}

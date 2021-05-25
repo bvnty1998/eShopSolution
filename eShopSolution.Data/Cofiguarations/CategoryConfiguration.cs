@@ -14,6 +14,7 @@ namespace eShopSolution.Data.Cofiguarations
         {
             builder.ToTable("Categories");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
             //builder.HasMany(x => x.Products).WithOne();
             builder.Property(x => x.Status).HasDefaultValue(Status.Active);
             
