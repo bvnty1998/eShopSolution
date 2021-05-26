@@ -39,9 +39,36 @@ namespace eShopSolution.AdminApp.Services
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri("http://apieshop.somee.com");
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            var response = await client.PostAsync("/api/ManageRole/AssignRoleToUser", httpContent);
+            var id = viewModel[0].userId;
+            var resultDelete = await this.DeleteRoleForUser(token, id);
+            if(resultDelete.statusCode == 200)
+            {
+                var response = await client.PostAsync("/api/ManageRole/AssignRoleToUser", httpContent);
+                var data = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ResultApiAssignRoleForUser>(data);
+                return result;
+            }
+            else
+            {
+                var result = new ResultApiAssignRoleForUser()
+                {
+                    statusCode = 401,
+                    message = "Delete roles faild",
+                    data = false
+                };
+                return result;
+            }
+        }
+
+        public async Task<ResultApiDeleteRoleForUser> DeleteRoleForUser(string token, Guid Id)
+        {
+          
+            var client = _httClientFactory.CreateClient();
+            client.BaseAddress = new Uri("http://apieshop.somee.com");
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            var response = await  client.DeleteAsync("/api/ManageRole/DeleteRoleForUserById?Id=" + Id);
             var data = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ResultApiAssignRoleForUser>(data);
+            var result = JsonConvert.DeserializeObject<ResultApiDeleteRoleForUser>(data);
             return result;
         }
 
@@ -95,6 +122,13 @@ namespace eShopSolution.AdminApp.Services
         public int statusCode { set; get; }
         public string message { set; get; }
         public  List<GetPermissionViewModel> data { set; get; }
+    }
+
+    public class ResultApiDeleteRoleForUser
+    {
+        public int statusCode { set; get; }
+        public string message { set; get; }
+        public bool data { set; get; }
     }
 
 

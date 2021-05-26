@@ -103,7 +103,7 @@ namespace eShopSolution.BackendApi.Controllers
         public async Task<IActionResult> DeleteRoleForUserById(Guid Id)
         {
             var result = await _manageRole.DeleteRoleForUserById(Id);
-            if (result != true)
+            if (result == true)
             {
                 return new OkObjectResult(new
                 {

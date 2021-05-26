@@ -101,8 +101,8 @@ namespace eShopSolution.Application.System.Roles
 
         public async Task<bool> DeleteRoleForUserById(Guid Id)
         {
-            var roleforuser= await _context.Permissions.Where(x => x.UserId == Id).ToListAsync();
-            _context.Permissions.RemoveRange(roleforuser);
+            var roleforuser= _context.Permissions.Where(x => x.UserId == Id).ToList();
+           _context.Permissions.RemoveRange(roleforuser);
             return true;
         }
     }

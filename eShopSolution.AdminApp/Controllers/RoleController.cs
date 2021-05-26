@@ -118,15 +118,15 @@ namespace eShopSolution.AdminApp.Controllers
             var id = new Guid(HttpContext.Session.GetString("UserId"));
             var roles = await _manageRole.GetRoleByUserId(token, id);
             var rolosAccess = roles.data.Any(x => x.RoleName == CommonController.ASSGINROLE);
-            if (rolosAccess == false)
-            {
-                return Json(new
-                {
-                    Code = HttpStatusCode.Forbidden,
-                    Success = true,
-                    Data = false,
-                });
-            };
+            //if (rolosAccess == false)
+            //{
+            //    return Json(new
+            //    {
+            //        Code = HttpStatusCode.Forbidden,
+            //        Success = true,
+            //        Data = false,
+            //    });
+            //};
             // end check roles
            
             var rs = await _manageRole.AssignRoleForUser(token, permission);

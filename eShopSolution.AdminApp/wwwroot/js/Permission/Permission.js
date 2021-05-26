@@ -19,14 +19,15 @@
                 url: '/Role/GetRoleById',
                 success: function (jsonData) {
                     if (jsonData.success == true) {
-                       
+                        RefreshRoleChecked();
                         $.each(jsonData.data, function (i, roleChecked) {
                             $.each(caheObj.allRole, function (i, role) {
                                 if (role.functionName == roleChecked.functionName && role.Name == roleChecked.roleName) {
-                                    var id = 'input' + '#' + roleChecked.roleId + '.role.'+ roleChecked.functionName ;
-                                  
+                                    var id = 'input' + '#' + roleChecked.roleId + '.role.' + roleChecked.functionName;
+
                                     $(id).prop("checked", true);
                                 }
+                               
                             })
                         })
                     }
@@ -60,6 +61,14 @@
                 }
             })
             caheObj.allRole = arrRole
+        }
+
+        function RefreshRoleChecked() {
+            $.each(caheObj.allRole, function (i, role) {
+                var id = 'input' + '#' + role.  Id + '.role.' + role.functionName;
+                $(id).prop("checked", false);
+
+            })
         }
         // End Load Permission assgined
     }

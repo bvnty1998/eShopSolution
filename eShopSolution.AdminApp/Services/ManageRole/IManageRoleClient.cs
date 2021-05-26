@@ -11,5 +11,6 @@ namespace eShopSolution.AdminApp.Services
         Task<ResultApiGetRoleAll> GetAllRole(string token);
         Task<ResultApiAssignRoleForUser> AssignRoleForUser(string token, List<PermissionViewModel> viewModel);
         Task<ResultApiGettRoleById> GetRoleByUserId(string token, Guid Id);
+        Task<ResultApiDeleteRoleForUser> DeleteRoleForUser(string token, Guid Id);
     }
 }
